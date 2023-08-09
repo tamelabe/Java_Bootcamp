@@ -10,6 +10,10 @@ public class Program {
             System.exit(-1);
         }
         String[] arg = args[0].split("=");
+        if (!arg[0].equals("--current-folder")) {
+            System.err.println("Please write command correctly (--current-folder=PATH)");
+            System.exit(-1);
+        }
         FileManager fm = new FileManager(arg[1]);
         Scanner sc = new Scanner(System.in);
         String buffer = sc.nextLine();

@@ -41,7 +41,6 @@ public class IOSignatures {
                 buffer.append(String.format("%02X ", stream));
             }
             magicString = buffer.toString().trim();
-            System.out.println(magicString);
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
