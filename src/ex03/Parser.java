@@ -13,7 +13,7 @@ public class Parser {
     int[] numbers;
 
     public Parser() throws IOException {
-        this.filepath = Paths.get("ex03/files_urls.txt");
+        this.filepath = Paths.get("src/ex03/files_urls.txt");
         links = new LinkedList<>();
         parseFile();
     }

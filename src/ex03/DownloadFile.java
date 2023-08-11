@@ -8,42 +8,51 @@ import java.net.HttpURLConnection;
 import java.util.Queue;
 
 public class DownloadFile {
-    private Links links;
-    private String saveToPath;
+    private final Links links;
+    private final String saveToPath;
     private int count;
     public DownloadFile(Links links) throws IOException {
         this.links = links;
-        saveToPath = "ex03/downloads";
+        saveToPath = "/Users/tamelabe/Projects/java/Java_Bootcamp.Day03-1/src/ex03/downloads";
         count = 0;
         download();
     }
 
     private void download() throws IOException {
-        startMessage();
         URL link = links.getLink();
+        count++;
+        startMessage();
+        finalMessage();
         HttpURLConnection connection = (HttpURLConnection) link.openConnection();
         int response = connection.getResponseCode();
         if (response != 200) {
             System.err.println("Server is not response (URL: " + link.toString() + ")");
             return;
         }
+        String contentLengthHeader = connection.getHeaderField("Content-Length");
+        int fileSize = Integer.parseInt(contentLengthHeader);
         InputStream inputStream = connection.getInputStream();
-        try (BufferedInputStream bis = new BufferedInputStream(inputStream);
-            FileOutputStream fos = new FileOutputStream(saveToPath)) {
-            byte[] buffer = new byte[4096];
-            int bytes = 0;
-            while ((bytes = bis.read(buffer)) != -1) {
-                fos.write(buffer, 0, bytes);
+        BufferedInputStream bis = new BufferedInputStream(inputStream);
+        FileOutputStream fos = new FileOutputStream(saveToPath);
+        System.out.println("Hello");
+        byte[] buffer = new byte[4096];
+        int bytes = 0, totalBytesRead = 0;;
+        while ((bytes = bis.read(buffer)) != -1) {
+            fos.write(buffer, 0, bytes);
+            totalBytesRead += bytes;
+            if (totalBytesRead >= fileSize) {
+                break;
             }
         }
-        count++;
-        finalMessage();
+
+        bis.close();
+        fos.close();
     }
 
     private void startMessage() {
         System.out.println(" start download file number " + (count + 1));
     }
     private void finalMessage() {
-        System.out.println(" finish download file number " + (count));
+        System.out.println("Thread- + count + finish download file number " + (count));
     }
 }
